@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using UnityEngine;
 
 public class ThirdPersonMovement : MonoBehaviour
@@ -21,8 +22,11 @@ public class ThirdPersonMovement : MonoBehaviour
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
 
+    private Character_hit_detection character_hit_detection;
+
     private void Start()
     {
+        character_hit_detection = GetComponent<Character_hit_detection>();
         if (animator = GetComponentInChildren<Animator>())
         {
             //success
@@ -42,7 +46,7 @@ public class ThirdPersonMovement : MonoBehaviour
         curSpeed = curMove.magnitude / Time.deltaTime;
         previousPosition = transform.position;
 
-        if (direction.magnitude >= 0.1f)
+        if (direction.magnitude >= 0.01f)
         {
             animator.SetBool("running", true);
 
@@ -55,6 +59,10 @@ public class ThirdPersonMovement : MonoBehaviour
             //move character WASD
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             controller.Move(moveDir.normalized * moveSpeed * Time.deltaTime);
+        }
+        else
+        {
+            animator.SetBool("running", false);
         }
         if (controller.isGrounded == true) //if player is on ground
         {
@@ -79,6 +87,11 @@ public class ThirdPersonMovement : MonoBehaviour
         }
         else if(Input.GetButtonDown("Attack2")){
             animator.SetTrigger("attack2");
+        }
+        //death
+        if(character_hit_detection.health <= 0)
+        {
+            animator.SetBool("dead", true);
         }
     }
 }

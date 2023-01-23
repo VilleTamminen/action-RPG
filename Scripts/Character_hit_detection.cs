@@ -96,7 +96,7 @@ public class Character_hit_detection : MonoBehaviour
                 bool startRagdollOnce = true;
                 if (startRagdollOnce)
                 {
-                    StartRagdoll();
+                  //  StartRagdoll();
                     startRagdollOnce = false;
                 }
             }
